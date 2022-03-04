@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 '''
-cron: 35 15 * * *
+cron: 59 23 * * 1
 new Env('发财挖宝');
 活动入口: 京东极速版>我的>发财挖宝
 脚本功能为: 挖宝，提现，没有助力功能! 
@@ -242,35 +242,6 @@ def happyDigDo(cookie,roundid,rowIdx,colIdx):
     else:
         print(f'挖取失败\n{res}\n')
 
-# # 助力码
-# def inviteCode(cookie):
-#     global inviteCode_1_list,inviteCode_2_list
-#     body={"linkId":linkId}
-#     res=taskGetUrl("happyDigHome", body, cookie)
-#     if not res:
-#         return
-#     try:
-#         if res['success']:
-#             print(f"账号{get_pin(cookie)}助力码为{res['data']['inviteCode']}")
-#             inviteCode_1_list.append(res['data']['inviteCode'])
-#             print(f"账号{get_pin(cookie)}助力码为{res['data']['markedPin']}")
-#             inviteCode_2_list.append(res['data']['markedPin'])
-#         else:
-#             print('快去买买买吧')
-#     except:
-#         print(f"错误\n{res}\n")
-
-# # 助力
-# def happyDigHelp(cookie,fcwbinviter,fcwbinviteCode):
-#     print(f"账号 {get_pin(cookie)} 去助力{fcwbinviteCode}")
-#     xueliang(cookie)
-#     body={"linkId":linkId,"inviter":fcwbinviter,"inviteCode":fcwbinviteCode}
-#     res=taskGetUrl("happyDigHelp", body, cookie)
-#     if res['success']:
-#         print('助力成功')
-#     else:
-#         print(res['errMsg'])
-
 # 领取奖励
 def happyDigExchange(cookie):
     for n in range(0,4):
@@ -360,21 +331,6 @@ def wecat(cookie,amountid,poolBaseId,prizeGroupId,prizeBaseId):
 
 def main():
     print('🔔发财挖宝，开始！\n')
-
-    # print('获取助力码\n')
-    # global inviteCode_1_list,inviteCode_2_list
-    # inviteCode_1_list=list()
-    # inviteCode_2_list=list()
-    # for cookie in cookie_list:
-    #    inviteCode(cookie) 
-
-    # print('互助\n')
-    # inviteCode_2_list=inviteCode_2_list[:2]
-    # for e,fcwbinviter in enumerate(inviteCode_2_list):
-    #     fcwbinviteCode=inviteCode_1_list[e]
-    #     for cookie in cookie_list:
-    #         happyDigHelp(cookie,fcwbinviter,fcwbinviteCode)
-
     print(f'====================共{len(cookie_list)}京东个账号Cookie=========\n')
 
     for e,cookie in enumerate(cookie_list,start=1):
