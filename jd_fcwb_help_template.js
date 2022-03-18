@@ -21,7 +21,7 @@ if ($.isNode()) {
     ].filter((item) => !!item);
 }
 let cookie = '';
-let curRound = 1!(async () => {
+!(async () => {
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
             "open-url": "https://bean.m.jd.com/bean/signIndex.action"
