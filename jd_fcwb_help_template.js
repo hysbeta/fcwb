@@ -1,56 +1,35 @@
 /*
-发财挖宝
+发财挖宝助力
 活动入口：极速版-发财挖宝助力
-目前需要下一单才能通关，需要的自己玩下
-活动部分账号验证h5st参数，请自行抓包参数添加 
-小号助力大号，抓包助力成功链接在代码236行修改为完整抓包链接，运行脚本提示 都黑号了，别薅了 为正常现象。
-h5st参数有时效性，抓包后请及时运行脚本
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 cron: 59 23 1 1 1
 * * */
 const $ = new Env('发财挖宝助力');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
-let link = `pTTvJeSTrpthgk9ASBVGsw`;
-let wbRun = false;
 const JD_API_HOST = 'https://api.m.jd.com';
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
     })
-    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-    };
-    if (process.env.JD_FCWB_WB) {
-        wbRun = process.env.JD_FCWB_WB || wbRun;
-    }
+    if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
     cookiesArr = [
         $.getdata("CookieJD"),
         $.getdata("CookieJD2"),
-        ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
+        ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)
+    ].filter((item) => !!item);
 }
 let cookie = '';
-let fcwbinviter = "";
-let fcwbinviteCode = "";
-let roundList =[]
-let curRound = 1
-!(async () => {
+let curRound = 1!(async () => {
     if (!cookiesArr[0]) {
-        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {
+            "open-url": "https://bean.m.jd.com/bean/signIndex.action"
+        });
         return;
     }
-	console.log("\n活动入口：极速版-》我的-》发财挖宝"+"\n请务必先手动进入活动后随意点击方块后执行脚本"+"\n若点击方块获得0.01红包即活动黑了。"+"\n没助力是因为验证h5st，自行抓包替换");
-    let res = [];
+    console.log("\n活动入口：极速版-》我的-》发财挖宝" + "\n请务必先手动进入活动后随意点击方块后执行脚本" + "\n若点击方块获得0.01红包即活动黑了。" + "\n没助力是因为验证h5st，自行抓包替换");
 
-    try{res = await getAuthorShareCode('https://gitee.com/KingRan521/JD-Scripts/raw/master/shareCodes/fcwb.json');}catch (e) {}
-     if(!res){res = [];}
-    
-    if(res.length > 0){
-        let actCodeInfo = getRandomArrayElements(res,1)[0];
-        fcwbinviter = actCodeInfo.fcwbinviter;
-        fcwbinviteCode = actCodeInfo.fcwbinviteCode;
-    }
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i];
@@ -61,29 +40,18 @@ let curRound = 1
             //await TotalBean();
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             if (!$.isLogin) {
-                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
+                $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {
+                    "open-url": "https://bean.m.jd.com/"
+                });
                 if ($.isNode()) {
                     await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
                 }
                 continue
             }
-            roundList =[]
             try {
                 await main()
             } catch (e) {
                 $.logErr(e)
-            }
-
-            if(wbRun) {
-                let data = roundList.filter(e => e.round === curRound)
-                if (!data[0]) {
-                    continue
-                }
-                console.log('当前正在通关' + curRound + '关\n')
-                for (let chunk of data[0].chunks.filter(e => e.state !== 1)) {
-                    await wb(curRound, chunk.colIdx, chunk.rowIdx)
-                    await $.wait(3000)
-                }
             }
         }
     }
@@ -92,152 +60,35 @@ let curRound = 1
 }).finally(() => {
     $.done();
 });
-function wb(round,rowIdx,colIdx) {
-
-    return new Promise((resolve) => {
-        let body = {"round":curRound,"rowIdx":rowIdx,"colIdx":colIdx,"linkId":link}
-        $.get(taskurl("happyDigDo",body), async (err, resp, data) => {
-
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        data = JSON.parse(data);
-                        if(data.success === true){
-                            if(data.data.chunk.type ===4 ){
-                                console.log(`挖到炸弹  哦嚯`)
-                            }else if(data.data.chunk.type == 1){
-                                console.log(`挖到优惠券 ${data.data.chunk.value}`)
-                            }else if(data.data.chunk.type == 2){
-                                console.log(`挖到红包 ${data.data.chunk.value}`)
-                            }else if(data.data.chunk.type == 3){
-                                console.log(`挖到现金 ${data.data.chunk.value}`)
-                            }
-
-                            // console.log(`export fcwbinviter='${data.data.markedPin}'`)
-                        }else {
-
-                            console.log(`挖宝异常   `+data.errMsg)
-                        }
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
 async function main() {
-    let homeInfo = await takeRequest(`happyDigHome`,`{"linkId":"${link}"}`,true);
-    if(JSON.stringify(homeInfo) === '{}' || !homeInfo){
-        console.log(`都黑号了，别薅了`);
-        return;
-    }
-    console.log(`获取活动详情成功`);
-    roundList = homeInfo.roundList
-    curRound = homeInfo.curRound
-    console.log(`fcwbinviteCode='${homeInfo.inviteCode}'`)
-    console.log(`fcwbinviter='${homeInfo.markedPin}'`)
-    if(fcwbinviter && fcwbinviteCode){
-        console.log(`去助力:${fcwbinviter}`);
-        await takeRequest(`happyDigHelp`,`{"linkId":"${link}","inviter":"${fcwbinviter}","inviteCode":"${fcwbinviteCode}"}`);
-        //console.log(`助力结果：${JSON.stringify(homeInfo)}`);
-    }
-    $.freshFlag = false;
-    if($.index === 1){
-        fcwbinviter = homeInfo.markedPin;
-        fcwbinviteCode = homeInfo.inviteCode;
-		await doTask();
-    }
-
-    if($.freshFlag){
-        await $.wait(2000);
-        homeInfo = await takeRequest(`happyDigHome`,`{"linkId":"${link}"}`,true);
-    }
-    let blood = homeInfo.blood;
-    console.log(`当前有${blood}滴血`);
-}
-async function doTask(){
-    let taskList = await takeRequest(`apTaskList`,`{"linkId":"${link}"}`);
-    for (let i = 0; i < taskList.length; i++) {
-        let oneTask = taskList[i];
-        if(oneTask.taskFinished){
-            console.log(`任务：${oneTask.taskTitle},${oneTask.taskShowTitle},已完成`);
-            continue;
-        }
-        if(oneTask.taskType === 'BROWSE_CHANNEL'){
-            if(oneTask.id === 454){
-                console.log(`任务：${oneTask.taskTitle},${oneTask.taskShowTitle},去执行`);
-                let doTask = await takeRequest(`apDoTask`,`{"linkId":"${link}","taskType":"${oneTask.taskType}","taskId":${oneTask.id},"channel":4,"itemId":"${encodeURIComponent(oneTask.taskSourceUrl)}","checkVersion":false}`);
-                console.log(`执行结果：${JSON.stringify(doTask)}`);
-                await $.wait(2000);
-                $.freshFlag = true;
-            }
-            if(oneTask.id === 504){
-                 //let detail = await takeRequest(`apTaskDetail`,`{"linkId":"${link}","taskType":"${oneTask.taskType}","taskId":${oneTask.id},"channel":4}`);
-                 //await $.wait(1000);
-                 //let status = detail.status;
-                 //let taskItemList =  detail.taskItemList;
-                 //for (let j = 0; j < taskItemList.length && j < (status.finishNeed - status.userFinishedTimes); j++) {
-                     //console.log(`浏览：${taskItemList[j].itemName}`);
-                     //let doTask = await takeRequest(`apTaskTimeRecord`,`{"linkId":"${link}","taskType":"${oneTask.taskType}","taskId":${oneTask.id},"channel":4,"itemId":"${encodeURIComponent(taskItemList[j].itemId)}","checkVersion":false}`);
-                     //await $.wait(31000);
-					 //console.log(`执行结果：${JSON.stringify(doTask)}`);
-                     //await $.wait(2000);
-                 //}
-            }
-        }
+    if (fcwbinviter && fcwbinviteCode) {
+        await takeRequest(`happyDigHelp`);
     }
 }
-function taskurl(functionId,body) {
-    return {
-        url: `${JD_API_HOST}/?functionId=${functionId}&body=${escape(JSON.stringify(body))}&t=1635561607124&appid=activities_platform&client=H5&clientVersion=1.0.0`,
 
-        headers: {
-
-            "Cookie": cookie,
-            "Origin": "https://api.m.jd.com",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-
-        }
-    }
-}
-function safeGet(data) {
-    try {
-        if (typeof JSON.parse(data) == "object") {
-            return true;
-        }
-    } catch (e) {
-        console.log(e);
-        console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
-        return false;
-    }
-}
-async function takeRequest(functionId,bodyInfo){
-    let  url = `fcwb_h5st_url`;
+async function takeRequest(functionId) {
+    let url = `fcwb_h5st_url`;
     const headers = {
-        'Host' : `api.m.jd.com`,
-        'Accept' : `application/json, text/plain, */*`,
-        'Origin' : `https://bnzf.jd.com`,
-        'Cookie' : cookie ,
-        'Accept-Encoding' : `gzip, deflate, br`,
+        'Host': `api.m.jd.com`,
+        'Accept': `application/json, text/plain, */*`,
+        'Origin': `https://bnzf.jd.com`,
+        'Cookie': cookie,
+        'Accept-Encoding': `gzip, deflate, br`,
         'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-        'Accept-Language' : `zh-cn`,
-        'Referer' : `https://bnzf.jd.com/?activityId=${link}`
+        'Accept-Language': `zh-cn`
     };
-    let sentInfo = {url: url, headers: headers};
+    let sentInfo = {
+        url: url,
+        headers: headers
+    };
     return new Promise(async resolve => {
         $.get(sentInfo, (err, resp, data) => {
             try {
-                if(err){
+                if (err) {
                     console.log(err);
-                }else{
+                } else {
                     data = JSON.parse(data);
-                    if(data && data.data && JSON.stringify(data.data) === '{}'){
+                    if (data && data.data && JSON.stringify(data.data) === '{}') {
                         console.log(JSON.stringify(data))
                     }
                 }
@@ -249,49 +100,6 @@ async function takeRequest(functionId,bodyInfo){
             }
         })
     })
-}
-function getAuthorShareCode(url) {
-    return new Promise(resolve => {
-        const options = {
-            url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-            }
-        };
-        if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-            const tunnel = require("tunnel");
-            const agent = {
-                https: tunnel.httpsOverHttp({
-                    proxy: {
-                        host: process.env.TG_PROXY_HOST,
-                        port: process.env.TG_PROXY_PORT * 1
-                    }
-                })
-            }
-            Object.assign(options, { agent })
-        }
-        $.get(options, async (err, resp, data) => {
-            try {
-                if (err) {
-                } else {
-                    if (data) data = JSON.parse(data)
-                }
-            } catch (e) {
-                // $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
-function getRandomArrayElements(arr, count) {
-    var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
-    while (i-- > min) {
-        index = Math.floor((i + 1) * Math.random());
-        temp = shuffled[index];
-        shuffled[index] = shuffled[i];
-        shuffled[i] = temp;
-    }
-    return shuffled.slice(min);
 }
 
 // prettier-ignore
