@@ -61,9 +61,7 @@ let cookie = '';
     $.done();
 });
 async function main() {
-    if (fcwbinviter && fcwbinviteCode) {
-        await takeRequest(`happyDigHelp`);
-    }
+    await takeRequest(`happyDigHelp`);
 }
 
 async function takeRequest(functionId) {
