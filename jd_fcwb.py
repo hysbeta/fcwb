@@ -178,7 +178,7 @@ def happyDigHome(cookie):
                 print(f'剩余血量 {a[0]}')
                 print(f'当前池已得京东红包 {a[2]}\n当前池已得微信红包 {a[1]}\n')
                 _blood=xueliang(cookie)
-                if _blood>1  or incep_blood>=21:
+                if _blood>1  or incep_blood>25:
                     happyDigDo(cookie,roundid,0,0)
                     if e==0 or e==1:
                         roundid_n=4
@@ -187,7 +187,7 @@ def happyDigHome(cookie):
                     for n in range(roundid_n):
                         for i in range(roundid_n):
                             _blood=xueliang(cookie)
-                            if _blood>1  or incep_blood>=21:
+                            if _blood>1  or incep_blood>25:
                                 print(f'当前血量为 {_blood} 健康，继续挖宝')
                                 print(f'本次挖取坐标为 ({n},{i})')
                                 happyDigDo(cookie,roundid,n,i)
