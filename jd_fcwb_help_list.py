@@ -58,7 +58,7 @@ def get_help_link(cookies):
             inviteCode = str(json.loads(res.text)["data"]["inviteCode"])
             inviterID = str(json.loads(res.text)["data"]["markedPin"])
             help_url = "https://bnzf.jd.com/?activityId="+activityID+"&inviterId="+inviterID+"&inviterCode="+inviteCode
-            #+"&ad_od=share&utm_source=androidapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=Wxfriends"
+            # help_url = help_url + "&ad_od=share&utm_source=androidapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=Wxfriends"
             print(JDPin)
             print(help_url)
         except:
