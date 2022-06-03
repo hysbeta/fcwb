@@ -69,5 +69,5 @@ class H5ST {
 }
 
 export {
-  H5ST
+  console.log(H5ST)
 }
