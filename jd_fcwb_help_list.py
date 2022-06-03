@@ -14,7 +14,7 @@ new Env('发财挖宝助力链接');
 
 
 def get_cookies(vip_select=True):
-    cookies_temp_arr = []
+    cookies_arr = []
     env_cookies = os.environ["JD_COOKIE"].split('&')
     vip_pins = os.environ["JDLITE_VIP"].split("&")
     if len(vip_pins) != 0 and vip_select:
@@ -22,11 +22,11 @@ def get_cookies(vip_select=True):
         for env_cookie in env_cookies:
             for vip_pin in vip_pins:
                 if str(vip_pin) in str(env_cookie):
-                    cookies_temp_arr.append(env_cookie)
+                    cookies_arr.append(env_cookie)
                     break
     else:
-        cookies_temp_arr = env_cookies
-    if len(cookies_temp_arr) == 0:
+        cookies_arr = env_cookies
+    if len(cookies_arr) == 0:
         if not vip_select:
             raise Exception("无有效Cookies，请检查。")
         else:
