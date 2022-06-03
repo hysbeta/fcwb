@@ -35,9 +35,9 @@ def get_cookies(vip_select=True):
 
 
 def get_help_link(cookies):
-    help_list=[]
     for cookie in cookies:
         try:
+            res_code = 0
             for text in cookie.split(";"):
                 if "pin" in str(text):
                     JDPin=str(text).split("=")[1]
@@ -52,11 +52,14 @@ def get_help_link(cookies):
                 'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
                 'cookie': cookie
             }
-            res = requests.get(url=url, headers=headers, verify=False, timeout=10)
+            while res_code != 200:
+                res = requests.get(url=url, headers=headers, verify=False, timeout=10)
+                res_code = res.status_code
             inviteCode = str(json.loads(res.text)["data"]["inviteCode"])
             inviterID = str(json.loads(res.text)["data"]["markedPin"])
             help_url = "https://bnzf.jd.com/?activityId="+activityID+"&inviterId="+inviteCode+"&inviterCode="+inviterID
-            print(JDPin+":"+help_url)
+            print(JDPin)
+            print(help_url)
         except:
             print("[Error]"+str(cookie))
 
