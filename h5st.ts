@@ -64,10 +64,11 @@ class H5ST {
     }
     s = s.slice(0, -1)
     s = CryptoJS.HmacSHA256(s, y).toString(CryptoJS.enc.Hex)
+    console.log(encodeURIComponent(`${this.timestamp};${this.fp};${this.appId.toString()};${this.tk};${s};3.0;${this.time.toString()}`))
     return encodeURIComponent(`${this.timestamp};${this.fp};${this.appId.toString()};${this.tk};${s};3.0;${this.time.toString()}`)
   }
 }
 
 export {
-  console.log(H5ST)
+  H5ST
 }
