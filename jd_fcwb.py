@@ -102,6 +102,7 @@ cookie_list=Judge_env().main_run()
 
 
 def taskGetUrl(functionId, body, cookie):
+    res_code = 0
     url=f'https://api.m.jd.com/?functionId={functionId}&body={json.dumps(body)}&t={gettimestamp()}&appid=activities_platform&client=H5&clientVersion=1.0.0'
     headers={
         'Cookie': cookie,
@@ -114,13 +115,13 @@ def taskGetUrl(functionId, body, cookie):
         'Accept-Language': 'zh-cn',
         'Accept-Encoding': 'gzip, deflate, br',
     }
-    for n in range(3):
+    while res_code != 200:
         try:
-            res=requests.get(url,headers=headers, timeout=10).json()
-            return res
+            res=requests.get(url,headers=headers, timeout=10)
+            res_code = res.status_code
         except:
-            if n==2:
-                print('API请求失败，请检查网路重试❗\n')   
+            res_code = 0
+    return res.json()
 
 
 # 剩余血量
