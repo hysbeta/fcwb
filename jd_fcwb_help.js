@@ -65,6 +65,7 @@ async function main() {
 }
 
 async function takeRequest(functionId) {
+    url = $.fcwb
     const headers = {
         'Host': `api.m.jd.com`,
         'Accept': `application/json, text/plain, */*`,
@@ -75,7 +76,7 @@ async function takeRequest(functionId) {
         'Accept-Language': `zh-cn`
     };
     let sentInfo = {
-        url: fcwb,
+        url: url,
         headers: headers
     };
     return new Promise(async resolve => {
