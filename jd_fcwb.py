@@ -115,7 +115,9 @@ def taskGetUrl(functionId, body, cookie):
         'Accept-Language': 'zh-cn',
         'Accept-Encoding': 'gzip, deflate, br',
     }
-    while res_code != 200:
+    try_time = 0
+    while res_code != 200 or try_time > 2:
+        try_time = try_time + 1
         try:
             res=requests.get(url,headers=headers, timeout=10)
             res_code = res.status_code
