@@ -15,7 +15,7 @@ if __name__ == '__main__':
     print("发财挖宝助力开始！")
     try:
         max_invite = 111
-        max_retry = 20
+        max_retry = 32
         sleep_time = 1
         if len(sys.argv) >= 2 and sys.argv[1][:21] == "https://api.m.jd.com/":
             fcwb_api = str(sys.argv[1])
