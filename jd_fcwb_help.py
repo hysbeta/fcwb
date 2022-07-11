@@ -37,7 +37,7 @@ if __name__ == '__main__':
         success_pin = []
         no_chance_pin = []
         failed_pin = []
-        for cookies in env_cookies.split("&"):
+        for cookies in env_cookies:
             print("========================================")
             for info in str(cookies).split(";"):
                 if "pt_pin" in info:
