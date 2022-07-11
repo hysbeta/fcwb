@@ -19,7 +19,7 @@ if __name__ == '__main__':
         sleep_time = 1
         if len(sys.argv) >= 2 and sys.argv[1][:21] == "https://api.m.jd.com/":
             fcwb_api = str(sys.argv[1])
-        elif os.environ["fcwb_api"] is not None and os.environ["fcwb_api"] != "":
+        elif "fcwb_api" in os.environ is not None and os.environ["fcwb_api"][:21] == "https://api.m.jd.com/":
             fcwb_api = str(os.environ["fcwb_api"])
         else:
             raise Exception("No API link!")
