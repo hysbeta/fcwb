@@ -33,7 +33,7 @@ if __name__ == '__main__':
             print(str(len(env_cookies)) + " 个 Cookies")
         print("目标助力次数 ： " + str(max_invite))
         print("最大重试次数 ： " + str(max_retry))
-        print("重试等待时间 ： " + str(sleep_time))
+        print("重试等待时间 ： " + str(sleep_time)+" s")
         success_pin = []
         no_chance_pin = []
         failed_pin = []
