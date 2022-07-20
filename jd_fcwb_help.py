@@ -58,7 +58,7 @@ if __name__ == '__main__':
                 res = requests.get(fcwb_api, headers=headers, verify=False, timeout=10)
                 print("第" + str(index) + "次尝试 : " + res.text)
                 if "已经邀请过" in res.text or "\"errMsg\":\"success\"" in res.text:
-                    success_pin.append("**"+currentPin[:-2])
+                    success_pin.append("**"+currentPin[-2:])
                     break
                 elif "参与者参与次数达到上限" in res.text or "不能给自己助力" in res.text:
                     no_chance_pin.append(currentPin)
