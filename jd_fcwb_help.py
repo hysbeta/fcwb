@@ -14,7 +14,8 @@ requests.packages.urllib3.disable_warnings()
 if __name__ == '__main__':
     print("发财挖宝助力开始！")
     try:
-        max_invite = 111
+        # max_invite = 111
+        max_invite = 1
         max_retry = 4
         sleep_time = 1
         if "fcwb_api" in os.environ is not None and os.environ["fcwb_api"][:21] == "https://api.m.jd.com/":
