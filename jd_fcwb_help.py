@@ -17,9 +17,7 @@ if __name__ == '__main__':
         max_invite = 111
         max_retry = 4
         sleep_time = 1
-        if len(sys.argv) >= 2 and sys.argv[1][:21] == "https://api.m.jd.com/":
-            fcwb_api = str(sys.argv[1])
-        elif "fcwb_api" in os.environ is not None and os.environ["fcwb_api"][:21] == "https://api.m.jd.com/":
+        if "fcwb_api" in os.environ is not None and os.environ["fcwb_api"][:21] == "https://api.m.jd.com/":
             fcwb_api = str(os.environ["fcwb_api"])
         else:
             raise Exception("No API link!")
