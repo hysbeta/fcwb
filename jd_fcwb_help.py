@@ -76,10 +76,17 @@ if __name__ == '__main__':
         try:
             TG_BOT_TOKEN = str(os.environ["TG_BOT_TOKEN"])
             TG_USER_ID = str(os.environ["TG_USER_ID"])
-            DataArray = {"chat_id": TG_USER_ID,
-                    "text": "Text"
-                    }
-            requests.post("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendMessage", data=DataArray)
+            DataArray = {
+                "chat_id": TG_USER_ID,
+                "text": str(len(success_pin)) + "个Pin成功助力 -> " + str(success_pin)
+            }
+            PostIndex = 0 
+            while PostIndex < max_retry:
+                req = requests.post("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendMessage", data=DataArray)
+                print(req.text)
+                print(req.status_code)
+                if req.status_code == 200:
+                    break
         except Exception as e:
             print(str(e))
     except Exception as e:
