@@ -73,5 +73,14 @@ if __name__ == '__main__':
         print("========================================")
         print(str(len(success_pin)) + "个Pin成功助力")
         print(str(success_pin))
+        try:
+            TG_BOT_TOKEN = str(os.environ["TG_BOT_TOKEN"])
+            TG_USER_ID = str(os.environ["TG_USER_ID"])
+            data = {"chat_id": TG_USER_ID,
+                    "text": "Text"
+                    }
+            requests.post("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendMessage")
+        except Exception as e:
+            print(str(e))
     except Exception as e:
         print(str(e))
