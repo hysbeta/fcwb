@@ -35,6 +35,7 @@ if __name__ == '__main__':
         print("最大重试次数 ： " + str(max_retry))
         print("重试等待时间 ： " + str(sleep_time)+"s")
         success_pin = []
+        invited_pin = []
         no_chance_pin = []
         failed_pin = []
         for cookies in env_cookies:
@@ -57,7 +58,10 @@ if __name__ == '__main__':
                 index += 1
                 res = requests.get(fcwb_api, headers=headers, verify=False, timeout=10)
                 print("第" + str(index) + "次尝试 : " + res.text)
-                if "已经邀请过" in res.text or "\"errMsg\":\"success\"" in res.text:
+                if "已经邀请过" in res.text:
+                    invited_pin.append("**"+currentPin[-2:])
+                    break
+                elif "\"errMsg\":\"success\"" in res.text:
                     success_pin.append("**"+currentPin[-2:])
                     break
                 elif "参与者参与次数达到上限" in res.text or "不能给自己助力" in res.text:
@@ -66,19 +70,22 @@ if __name__ == '__main__':
                 else:
                     pass
                 sleep(sleep_time)
-            if currentPin not in success_pin and currentPin not in no_chance_pin:
+            if currentPin not in invited_pin and currentPin not in success_pin and currentPin not in no_chance_pin:
                 failed_pin.append(currentPin)
-            if len(success_pin) >= max_invite:
+            if len(success_pin) + len(invited_pin) >= max_invite:
                 break
         print("========================================")
-        print(str(len(success_pin)) + "个Pin成功助力")
+        print("总共"+str(len(invited_pin) + len(success_pin)) + "个Pin成功助力")
+        print("原有"+str(len(invited_pin)) + "个Pin成功助力")
+        print(str(invited_pin))
+        print("新增"+str(len(success_pin)) + "个Pin成功助力")
         print(str(success_pin))
         try:
             TG_BOT_TOKEN = str(os.environ["TG_BOT_TOKEN"])
             TG_USER_ID = str(os.environ["TG_USER_ID"])
             DataArray = {
                 "chat_id": TG_USER_ID,
-                "text": str(len(success_pin)) + "个Pin成功助力 -> " + str(success_pin)
+                "text": str("总共"+str(len(invited_pin) + len(success_pin)) + "个Pin成功助力。原有"+str(len(invited_pin)) + "个Pin成功助力。"+str(invited_pin)+"新增"+str(len(success_pin)) + "个Pin成功助力。"+str(success_pin))
             }
             PostIndex = 0
             while PostIndex < max_retry:
