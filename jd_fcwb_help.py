@@ -80,13 +80,14 @@ if __name__ == '__main__':
                 "chat_id": TG_USER_ID,
                 "text": str(len(success_pin)) + "个Pin成功助力 -> " + str(success_pin)
             }
-            PostIndex = 0 
+            PostIndex = 0
             while PostIndex < max_retry:
                 req = requests.post("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendMessage", data=DataArray)
-                print(req.text)
-                print(req.status_code)
-                if req.status_code == 200:
+                if req.status_code == 200 and "\"ok\":true" in req.text:
                     break
+                else:
+                    print("Failed -> "+req.text)
+                PostIndex += 1
         except Exception as e:
             print(str(e))
     except Exception as e:
