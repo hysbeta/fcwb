@@ -85,7 +85,7 @@ if __name__ == '__main__':
             TG_USER_ID = str(os.environ["TG_USER_ID"])
             DataArray = {
                 "chat_id": TG_USER_ID,
-                "text": str("总共"+str(len(invited_pin) + len(success_pin)) + "个Pin成功助力。原有"+str(len(invited_pin)) + "个Pin成功助力。"+str(invited_pin)+"。新增"+str(len(success_pin)) + "个Pin成功助力。"+str(success_pin))
+                "text": str("总共"+str(len(invited_pin) + len(success_pin)) + "个Pin成功助力。%0A原有"+str(len(invited_pin)) + "个Pin成功助力。%0A"+str(invited_pin)+"。%0A新增"+str(len(success_pin)) + "个Pin成功助力。%0A"+str(success_pin))
             }
             PostIndex = 0
             while PostIndex < max_retry:
