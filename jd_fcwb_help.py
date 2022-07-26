@@ -76,10 +76,10 @@ if __name__ == '__main__':
         try:
             TG_BOT_TOKEN = str(os.environ["TG_BOT_TOKEN"])
             TG_USER_ID = str(os.environ["TG_USER_ID"])
-            data = {"chat_id": TG_USER_ID,
+            DataArray = {"chat_id": TG_USER_ID,
                     "text": "Text"
                     }
-            requests.post("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendMessage")
+            requests.post("https://api.telegram.org/bot" + TG_BOT_TOKEN + "/sendMessage", data=DataArray)
         except Exception as e:
             print(str(e))
     except Exception as e:
