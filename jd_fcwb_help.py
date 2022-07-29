@@ -16,7 +16,7 @@ if __name__ == '__main__':
     try:
         # max_invite = 111
         max_invite = 1
-        max_retry = 2
+        max_retry = 16
         sleep_time = 1
         if "fcwb_api" in os.environ is not None and os.environ["fcwb_api"][:21] == "https://api.m.jd.com/":
             fcwb_api = str(os.environ["fcwb_api"])
